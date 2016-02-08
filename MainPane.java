@@ -15,6 +15,7 @@ public class MainPane extends VBox {
     public MainPane(){
         this.setPrefSize(Main.WIDTH * 0.8, Main.HEIGHT * 0.6);
         this.setPadding(new Insets(10, 10, 10, 10));
+        this.setSpacing(10.0);
         this.setAlignment(Pos.CENTER);
         this.setBackground(new Background(new BackgroundFill(Color.LEMONCHIFFON, new CornerRadii(10.0), null)));
     }

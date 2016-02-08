@@ -25,12 +25,26 @@ enum AppState {READY_TO_PLAY, UNKNOWN;}
 
 public class Main extends Application {
     // app var's
-    final static int WIDTH = 800;
-    final static int HEIGHT = 300;
-    AppState appState = AppState.UNKNOWN;
-    List<File> filesList = new ArrayList<>();
-    List<Media> mediaList = new ArrayList<>();
-    MediaView mv = new MediaView();
+    static final int WIDTH = 800;
+    static final int HEIGHT = 300;
+
+    static Stage stage;
+    static RootNode rootNode = new RootNode();
+    static Scene primaryScene = new Scene(rootNode, WIDTH, HEIGHT);
+
+    static TopPane topPane = new TopPane();
+    static MainPane mainPane = new MainPane();
+    static BottomPane bottomPane = new BottomPane();
+
+    static Button choiseButton; // = new Button("Choose mp3 file...");
+    static Button startButton; // = new Button("Start playing...");
+    static Label choiseResponseButton; // = new Label("While nothing chosen...");
+
+    static FileChooser fc = new FileChooser();
+    static AppState appState = AppState.UNKNOWN;
+    static List<File> filesList = new ArrayList<>();
+    static List<Media> mediaList = new ArrayList<>();
+    static MediaView mv = new MediaView();
 
     // launch app
     public static void main (String args[]){
@@ -39,93 +53,25 @@ public class Main extends Application {
 
     @Override
     public void start (Stage primaryStage){
-        // title for stage
-        primaryStage.setTitle("ShuffleMP3Player");
+        stage = primaryStage;
 
-        // root node
-        final RootNode rootNode = new RootNode();
-        final Scene primaryScene = new Scene(rootNode, WIDTH, HEIGHT);
+        choiseButton = new Button("Choose mp3 file...");
+        startButton = new Button("Start playing...");
+        choiseResponseButton = new Label("While nothing chosen...");
+
+        primaryStage.setTitle("ShuffleMP3Player");
         primaryStage.setScene(primaryScene);
 
-        // other pane-nodes
-        final TopPane topPane = new TopPane();
-        final MainPane mainPane = new MainPane();
-        final BottomPane bottomPane = new BottomPane();
         rootNode.getChildren().add(topPane);
         rootNode.getChildren().add(mainPane);
         rootNode.getChildren().add(bottomPane);
 
-        /*
+        choiseButton.setOnAction(StorageInts.chooseFiles);
+        startButton.setOnAction(StorageInts.startChooserList);
 
-        final GridPane topPane = new GridPane();
-        topPane.setMinSize(0.7*WIDTH, 0.15*HEIGHT);
-        topPane.setAlignment(Pos.CENTER);
-        topPane.setHgap(5);
-        topPane.setVgap(5);
-        topPane.setPadding(new Insets(5, 5, 5, 5));
-        Background topPaneBG = new Background(new BackgroundFill(Color.AQUAMARINE, new CornerRadii(10.0), null));
-        topPane.setBackground(topPaneBG);
-        rootNode.add(topPane, 0, 0);
-
-        final Label stateLabel = new Label("State: " + appState.toString());
-        topPane.add(stateLabel, 0, 0);
-
-
-        final GridPane mainPane = new GridPane();
-        mainPane.setAlignment(Pos.CENTER);
-        mainPane.setHgap(5);
-        mainPane.setVgap(5);
-        mainPane.setPadding(new Insets(5, 5, 5, 5));
-        mainPane.setMinSize(0.7 * WIDTH, 0.4 * HEIGHT);
-        Background mainPaneBG = new Background(new BackgroundFill(Color.LEMONCHIFFON, new CornerRadii(10.0), null));
-        mainPane.setBackground(mainPaneBG);
-        rootNode.add(mainPane, 0, 1);
-
-        final FileChooser fc = new FileChooser();
-        fc.setTitle("Choose your file!");
-
-        final Button choiseButton = new Button("Choose mp3 file...");
-        mainPane.add(choiseButton, 0, 0);
-        final Button startButton = new Button("Start playing...");
-        mainPane.add(startButton, 1, 0);
-
-        final Label choiseResponse = new Label("Nothing choised");
-        mainPane.add(choiseResponse, 0, 1);
-
-
-
-
-        choiseButton.setOnAction((ActionEvent ae) -> {
-            filesList = fc.showOpenMultipleDialog(primaryStage);
-            if (filesList != null) {
-                appState = AppState.READY_TO_PLAY;
-                stateLabel.setText("State: " + appState.toString());
-                mediaList.clear();
-                for (File file : filesList) {
-                    try {mediaList.add(new Media(file.toURI().toURL().toString()));}
-                    catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
-                }
-            }
-            else choiseResponse.setText("Choose please!");
-        });
-
-        startButton.setOnAction((ActionEvent ae) -> {
-            if (filesList == null) return;
-            MediaPlayer mp = new MediaPlayer(mediaList.get(0));
-            MediaControl mc = new MediaControl(mp);
-            mainPane.add(mc, 0, 3);
-        });
-
-
-        final GridPane bottomPane = new GridPane();
-        bottomPane.setMinSize(0.7*WIDTH, 0.15*HEIGHT);
-        Background bottomPaneBG = new Background(new BackgroundFill(Color.SKYBLUE, new CornerRadii(10.0), null));
-        bottomPane.setBackground(bottomPaneBG);
-        rootNode.add(bottomPane, 0, 2);
-
-        */
-
-        // show stage
+        mainPane.getChildren().add(choiseButton);
+        mainPane.getChildren().add(startButton);
+        mainPane.getChildren().add(choiseResponseButton);
 
         primaryStage.show();
     }
