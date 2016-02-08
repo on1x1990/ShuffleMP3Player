@@ -25,8 +25,8 @@ enum AppState {READY_TO_PLAY, UNKNOWN;}
 
 public class Main extends Application {
     // app var's
-    final int WIDTH = 800;
-    final int HEIGHT = 300;
+    final static int WIDTH = 800;
+    final static int HEIGHT = 300;
     AppState appState = AppState.UNKNOWN;
     List<File> filesList = new ArrayList<>();
     List<Media> mediaList = new ArrayList<>();
@@ -43,17 +43,20 @@ public class Main extends Application {
         primaryStage.setTitle("ShuffleMP3Player");
 
         // root node
-        final GridPane rootNode = new GridPane();
-        rootNode.setAlignment(Pos.CENTER);
-        rootNode.setHgap(5);
-        rootNode.setVgap(5);
-        rootNode.setPadding(new Insets(5, 5, 5, 5));
-        rootNode.setGridLinesVisible(false);
+        final RootNode rootNode = new RootNode();
+        final Scene primaryScene = new Scene(rootNode, WIDTH, HEIGHT);
+        primaryStage.setScene(primaryScene);
 
-            // embedded grid panes
-            // --------
+        // other pane-nodes
+        final TopPane topPane = new TopPane();
+        final MainPane mainPane = new MainPane();
+        final BottomPane bottomPane = new BottomPane();
+        rootNode.getChildren().add(topPane);
+        rootNode.getChildren().add(mainPane);
+        rootNode.getChildren().add(bottomPane);
 
-        // topPane
+        /*
+
         final GridPane topPane = new GridPane();
         topPane.setMinSize(0.7*WIDTH, 0.15*HEIGHT);
         topPane.setAlignment(Pos.CENTER);
@@ -67,7 +70,7 @@ public class Main extends Application {
         final Label stateLabel = new Label("State: " + appState.toString());
         topPane.add(stateLabel, 0, 0);
 
-        // mainPane
+
         final GridPane mainPane = new GridPane();
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setHgap(5);
@@ -89,12 +92,7 @@ public class Main extends Application {
         final Label choiseResponse = new Label("Nothing choised");
         mainPane.add(choiseResponse, 0, 1);
 
-        //mainPane.add(mv, 0, 3);
-        /*
-        final Button playButton = new Button(">");
-        HBox mediaBar = new HBox();
-        mediaBar.getChildren().add(playButton);
-        */
+
 
 
         choiseButton.setOnAction((ActionEvent ae) -> {
@@ -102,25 +100,11 @@ public class Main extends Application {
             if (filesList != null) {
                 appState = AppState.READY_TO_PLAY;
                 stateLabel.setText("State: " + appState.toString());
-                // clear old mediaList
                 mediaList.clear();
-                // set new mediaList
                 for (File file : filesList) {
                     try {mediaList.add(new Media(file.toURI().toURL().toString()));}
                     catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
-                    /*
-                    try {
-                        MediaPlayer mp = new MediaPlayer(new Media(file.toURI().toURL().toString()));
-                        mp.setAutoPlay(true);
-                        mv = new MediaView(mp);
-                        String fileName = file.getName().toString();
-                        fileName = (fileName.length() > 35) ? fileName.substring(0, 34) : fileName;
-                        choiseResponse.setText("Playing " + fileName + "...");
-                    }
-                    catch (MalformedURLException e) {System.out.println(e);}
-                    */
                 }
-                //choiseResponse.setText("Your choise is: ");
             }
             else choiseResponse.setText("Choose please!");
         });
@@ -133,16 +117,16 @@ public class Main extends Application {
         });
 
 
-        // bottomPane
         final GridPane bottomPane = new GridPane();
         bottomPane.setMinSize(0.7*WIDTH, 0.15*HEIGHT);
         Background bottomPaneBG = new Background(new BackgroundFill(Color.SKYBLUE, new CornerRadii(10.0), null));
         bottomPane.setBackground(bottomPaneBG);
         rootNode.add(bottomPane, 0, 2);
 
+        */
+
         // show stage
-        final Scene primaryScene = new Scene(rootNode, WIDTH, HEIGHT);
-        primaryStage.setScene(primaryScene);
+
         primaryStage.show();
     }
 }
