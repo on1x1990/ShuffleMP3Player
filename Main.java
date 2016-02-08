@@ -37,7 +37,10 @@ public class Main extends Application {
     static BottomPane bottomPane = new BottomPane();
 
     static Button choiseButton; // = new Button("Choose mp3 file...");
-    static Button startButton; // = new Button("Start playing...");
+    static LineOverClips lineOverClips = new LineOverClips();
+        static Button startButton; // = new Button("Start playing...");
+        static Button nextClip;
+        static Button prevClip;
     static Label choiseResponseButton; // = new Label("While nothing chosen...");
 
     static FileChooser fc = new FileChooser();
@@ -45,6 +48,8 @@ public class Main extends Application {
     static List<File> filesList = new ArrayList<>();
     static List<Media> mediaList = new ArrayList<>();
     static MediaView mv = new MediaView();
+    static MediaControl mc;
+    static MediaControlClip mcc;
 
     // launch app
     public static void main (String args[]){
@@ -56,7 +61,9 @@ public class Main extends Application {
         stage = primaryStage;
 
         choiseButton = new Button("Choose mp3 file...");
-        startButton = new Button("Start playing...");
+            startButton = new Button("Start playing...");
+            nextClip = new Button(" >> ");
+            prevClip = new Button(" << ");
         choiseResponseButton = new Label("While nothing chosen...");
 
         primaryStage.setTitle("ShuffleMP3Player");
@@ -68,10 +75,19 @@ public class Main extends Application {
 
         choiseButton.setOnAction(StorageInts.chooseFiles);
         startButton.setOnAction(StorageInts.startChooserList);
+        nextClip.setOnAction(StorageInts.playNextClip);
 
         mainPane.getChildren().add(choiseButton);
-        mainPane.getChildren().add(startButton);
+        mainPane.getChildren().add(lineOverClips);
+            lineOverClips.getChildren().add(startButton);
+            lineOverClips.getChildren().add(nextClip);
+            lineOverClips.getChildren().add(prevClip);
         mainPane.getChildren().add(choiseResponseButton);
+
+        //mcc = new MediaControlClip();
+        //mainPane.getChildren().add(mcc);
+        mc = new MediaControl();
+        mainPane.getChildren().add(mc);
 
         primaryStage.show();
     }

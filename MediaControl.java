@@ -33,11 +33,23 @@ public class MediaControl extends BorderPane {
     private Slider volumeSlider;
     private HBox mediaBar;
 
-    public MediaControl(final MediaPlayer mp) {
+    private Pane mvPane;
+    private Button playButton;
+    private Label spacer;
+    private Label timeLabel;
+    private Label volumeLabel;
+
+    public void setMp(MediaPlayer setMp) {this.mp = setMp;}
+    public MediaPlayer getMp() {return this.mp;}
+    public void setMv(MediaView setMv) {this.mediaView = setMv;}
+
+    public MediaControl(){}
+
+    public void init(MediaPlayer mp) {
         this.mp = mp;
         setStyle("-fx-background-color: #bfc2c7;");
         mediaView = new MediaView(mp);
-        Pane mvPane = new Pane() {};
+        mvPane = new Pane() {};
         mvPane.getChildren().add(mediaView);
         mvPane.setStyle("-fx-background-color: black;");
         setCenter(mvPane);
@@ -46,7 +58,7 @@ public class MediaControl extends BorderPane {
         mediaBar.setAlignment(Pos.CENTER);
         mediaBar.setPadding(new Insets(5, 10, 5, 10));
         BorderPane.setAlignment(mediaBar, Pos.CENTER);
-        final Button playButton = new Button(">");
+        playButton = new Button(">");
 
 
         playButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -63,7 +75,6 @@ public class MediaControl extends BorderPane {
                 else {mp.pause();}
             }
         });
-
 
         mp.currentTimeProperty().addListener(new InvalidationListener()
         {
@@ -113,11 +124,11 @@ public class MediaControl extends BorderPane {
         setBottom(mediaBar);
 
         // add spacer
-        Label spacer = new Label("   ");
+        spacer = new Label("   ");
         mediaBar.getChildren().add(spacer);
 
         // add time label
-        Label timeLabel = new Label("Time: ");
+        timeLabel = new Label("Time: ");
         mediaBar.getChildren().add(timeLabel);
 
         // add time slider
@@ -144,7 +155,7 @@ public class MediaControl extends BorderPane {
         mediaBar.getChildren().add(playTime);
 
         // add the volume label
-        Label volumeLabel = new Label("Vol: ");
+        volumeLabel = new Label("Vol: ");
         mediaBar.getChildren().add(volumeLabel);
 
         // add volume slider
@@ -223,5 +234,28 @@ public class MediaControl extends BorderPane {
                         elapsedSeconds);
             }
         }
+    }
+
+    public void destroy(){
+        mediaBar.getChildren().remove(volumeSlider);
+        volumeSlider = null;
+        mediaBar.getChildren().remove(volumeLabel);
+        volumeLabel = null;
+        mediaBar.getChildren().remove(playTime);
+        playTime = null;
+        mediaBar.getChildren().remove(timeSlider);
+        timeSlider = null;
+        mediaBar.getChildren().remove(timeLabel);
+        timeLabel = null;
+        mediaBar.getChildren().remove(spacer);
+        spacer = null;
+        mediaBar.getChildren().remove(playButton);
+        playButton = null;
+        mediaBar = null;
+        mvPane.getChildren().remove(mediaView);
+        mvPane = null;
+        mediaView = null;
+        mp.dispose();
+        this.mp = null;
     }
 }

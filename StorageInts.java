@@ -5,6 +5,9 @@ import javafx.event.EventHandler;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import javax.sound.sampled.*;
+import java.applet.Applet;
+import java.io.*;
 import java.io.File;
 import java.net.MalformedURLException;
 
@@ -12,6 +15,8 @@ import java.net.MalformedURLException;
  * Created by Artem2011 on 08.02.2016.
  */
 public class StorageInts {
+    static int now = 0;
+
     // Обработка нажатия кнопки выбора файлов
     static final EventHandler<ActionEvent> chooseFiles = (ActionEvent ae) -> {
         Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
@@ -29,9 +34,28 @@ public class StorageInts {
 
     // Обработка нажатия кнопки старта нового плейлиста
     static final EventHandler<ActionEvent> startChooserList = (ActionEvent ae) -> {
-        if (Main.filesList == null) return;
-        MediaPlayer mp = new MediaPlayer(Main.mediaList.get(0));
-        MediaControl mc = new MediaControl(mp);
-        Main.mainPane.getChildren().add(mc);
+        if (Main.filesList.isEmpty()) return;
+        Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
+        Main.mainPane.getChildren().add(Main.mc);
+
+
+    };
+
+    // Обработка нажатия кнопки для следующей песни
+    static final EventHandler<ActionEvent> playNextClip = (ActionEvent ae) -> {
+        int next = ( now+1 > Main.mediaList.size()-1 ) ? 0 : now+1;
+        //MediaControl mcIn = new MediaControl(new MediaPlayer(Main.mediaList.get(next)));
+        //Main.mc.setMp(new MediaPlayer(Main.mediaList.get(next)));
+        //Main.mainPane.getChildren().remove(Main.mc);
+        //Main.mc.close();
+        //Main.mc.setMv(null);
+        //Main.mc.setMp(null);
+        //Main.mc = null;
+        //System.gc();
+        Main.mc.destroy();
+        Main.mc.init(new MediaPlayer(Main.mediaList.get(next)));
+        System.out.println("next = " + next);
+        now = next;
+        //Main.mc = mcIn;
     };
 }
