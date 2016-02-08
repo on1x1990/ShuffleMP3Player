@@ -13,6 +13,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,10 +25,11 @@ enum AppState {READY_TO_PLAY, UNKNOWN;}
 
 public class Main extends Application {
     // app var's
-    final int WIDTH = 500;
-    final int HEIGHT = 700;
+    final int WIDTH = 800;
+    final int HEIGHT = 300;
     AppState appState = AppState.UNKNOWN;
-    List<File> filesList;
+    List<File> filesList = new ArrayList<>();
+    List<Media> mediaList = new ArrayList<>();
     MediaView mv = new MediaView();
 
     // launch app
@@ -81,18 +83,32 @@ public class Main extends Application {
 
         final Button choiseButton = new Button("Choose mp3 file...");
         mainPane.add(choiseButton, 0, 0);
+        final Button startButton = new Button("Start playing...");
+        mainPane.add(startButton, 1, 0);
 
         final Label choiseResponse = new Label("Nothing choised");
         mainPane.add(choiseResponse, 0, 1);
 
-        mainPane.add(mv, 0, 3);
+        //mainPane.add(mv, 0, 3);
+        /*
+        final Button playButton = new Button(">");
+        HBox mediaBar = new HBox();
+        mediaBar.getChildren().add(playButton);
+        */
+
 
         choiseButton.setOnAction((ActionEvent ae) -> {
             filesList = fc.showOpenMultipleDialog(primaryStage);
             if (filesList != null) {
                 appState = AppState.READY_TO_PLAY;
                 stateLabel.setText("State: " + appState.toString());
+                // clear old mediaList
+                mediaList.clear();
+                // set new mediaList
                 for (File file : filesList) {
+                    try {mediaList.add(new Media(file.toURI().toURL().toString()));}
+                    catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
+                    /*
                     try {
                         MediaPlayer mp = new MediaPlayer(new Media(file.toURI().toURL().toString()));
                         mp.setAutoPlay(true);
@@ -102,11 +118,20 @@ public class Main extends Application {
                         choiseResponse.setText("Playing " + fileName + "...");
                     }
                     catch (MalformedURLException e) {System.out.println(e);}
+                    */
                 }
                 //choiseResponse.setText("Your choise is: ");
             }
             else choiseResponse.setText("Choose please!");
         });
+
+        startButton.setOnAction((ActionEvent ae) -> {
+            if (filesList == null) return;
+            MediaPlayer mp = new MediaPlayer(mediaList.get(0));
+            MediaControl mc = new MediaControl(mp);
+            mainPane.add(mc, 0, 3);
+        });
+
 
         // bottomPane
         final GridPane bottomPane = new GridPane();
