@@ -10,6 +10,7 @@ import java.applet.Applet;
 import java.io.*;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 /**
  * Created by Artem2011 on 08.02.2016.
@@ -21,7 +22,7 @@ public class StorageInts {
     static final EventHandler<ActionEvent> chooseFiles = (ActionEvent ae) -> {
         Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
         if (Main.filesList != null) {
-            Main.appState = AppState.READY_TO_PLAY;
+            //Main.appState = AppState.READY_TO_PLAY;
             //Main.stateLabel.setText("State: " + Main.appState.toString());
             Main.mediaList.clear();
             for (File file : Main.filesList) {
@@ -30,15 +31,17 @@ public class StorageInts {
             }
         }
         else Main.choiseResponseButton.setText("Choose please!");
+        if(!Main.filesList.isEmpty()) Main.filesList = new ArrayList<>();
     };
 
     // Кнопка новый плейлист
     static final EventHandler<ActionEvent> startChooserList = (ActionEvent ae) -> {
-        if (Main.filesList.isEmpty()) return;
+        if (Main.mediaList.isEmpty()) return;
+        now = 0;
+        if (Main.mc.getMp() != null) Main.mc.destroy();
         Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
-        Main.mainPane.getChildren().add(Main.mc);
-
-
+        //Main.mainPane.getChildren().add(Main.mc);
+        System.out.println("now = " + now + " :: " + Main.mediaList.get(now).getSource());
     };
 
     // Кнопка следующая песня
@@ -47,7 +50,7 @@ public class StorageInts {
         Main.mc.destroy();
         Main.mc.init(new MediaPlayer(Main.mediaList.get(next)));
         now = next;
-        System.out.println("now = " + now);
+        System.out.println("now = " + now + " :: " + Main.mediaList.get(now).getSource());
     };
 
     // Кнопка предыдущая песня
@@ -56,6 +59,11 @@ public class StorageInts {
         Main.mc.destroy();
         Main.mc.init(new MediaPlayer(Main.mediaList.get(prev)));
         now = prev;
-        System.out.println("now = " + now);
+        System.out.println("now = " + now + " :: " + Main.mediaList.get(now).getSource());
+    };
+
+    // Кнопка перетасовывания
+    static final EventHandler<ActionEvent> shuffleClips = (ActionEvent ae) -> {
+
     };
 }

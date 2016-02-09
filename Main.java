@@ -38,6 +38,7 @@ public class Main extends Application {
 
     static Button choiseButton; // = new Button("Choose mp3 file...");
     static LineOverClips lineOverClips = new LineOverClips();
+        static Button shuffleClips;
         static Button startButton; // = new Button("Start playing...");
         static Button nextClip;
         static Button prevClip;
@@ -60,6 +61,7 @@ public class Main extends Application {
         stage = primaryStage;
 
         choiseButton = new Button("Choose mp3 file...");
+            shuffleClips = new Button("Shuffle");
             startButton = new Button("Start playing...");
             nextClip = new Button(" >> ");
             prevClip = new Button(" << ");
@@ -73,13 +75,15 @@ public class Main extends Application {
         rootNode.getChildren().add(bottomPane);
 
         choiseButton.setOnAction(StorageInts.chooseFiles);
-        startButton.setOnAction(StorageInts.startChooserList);
-        nextClip.setOnAction(StorageInts.playNextClip);
-        prevClip.setOnAction(StorageInts.playPrevClip);
+            shuffleClips.setOnAction(StorageInts.shuffleClips);
+            startButton.setOnAction(StorageInts.startChooserList);
+            nextClip.setOnAction(StorageInts.playNextClip);
+            prevClip.setOnAction(StorageInts.playPrevClip);
 
 
         mainPane.getChildren().add(choiseButton);
         mainPane.getChildren().add(lineOverClips);
+            lineOverClips.getChildren().add(shuffleClips);
             lineOverClips.getChildren().add(startButton);
             lineOverClips.getChildren().add(nextClip);
             lineOverClips.getChildren().add(prevClip);
