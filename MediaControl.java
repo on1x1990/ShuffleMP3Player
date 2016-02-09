@@ -115,6 +115,7 @@ public class MediaControl extends BorderPane {
                     playButton.setText(">");
                     stopRequested = true;
                     atEndOfMedia = true;
+                    Main.nextClip.fire();
                 }
             }
         });
@@ -173,6 +174,8 @@ public class MediaControl extends BorderPane {
         });
 
         mediaBar.getChildren().add(volumeSlider);
+
+        mp.setAutoPlay(true);
     }
 
     protected void updateValues() {
@@ -257,5 +260,7 @@ public class MediaControl extends BorderPane {
         mediaView = null;
         mp.dispose();
         this.mp = null;
+        stopRequested = false;
+        atEndOfMedia = false;
     }
 }

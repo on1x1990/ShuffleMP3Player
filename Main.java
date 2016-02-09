@@ -77,6 +77,7 @@ public class Main extends Application {
         startButton.setOnAction(StorageInts.startChooserList);
         nextClip.setOnAction(StorageInts.playNextClip);
 
+
         mainPane.getChildren().add(choiseButton);
         mainPane.getChildren().add(lineOverClips);
             lineOverClips.getChildren().add(startButton);
