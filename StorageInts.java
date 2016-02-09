@@ -17,7 +17,7 @@ import java.net.MalformedURLException;
 public class StorageInts {
     static int now = 0;
 
-    // Обработка нажатия кнопки выбора файлов
+    // Кнопка выбора файлов
     static final EventHandler<ActionEvent> chooseFiles = (ActionEvent ae) -> {
         Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
         if (Main.filesList != null) {
@@ -32,7 +32,7 @@ public class StorageInts {
         else Main.choiseResponseButton.setText("Choose please!");
     };
 
-    // Обработка нажатия кнопки старта нового плейлиста
+    // Кнопка новый плейлист
     static final EventHandler<ActionEvent> startChooserList = (ActionEvent ae) -> {
         if (Main.filesList.isEmpty()) return;
         Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
@@ -41,21 +41,21 @@ public class StorageInts {
 
     };
 
-    // Обработка нажатия кнопки для следующей песни
+    // Кнопка следующая песня
     static final EventHandler<ActionEvent> playNextClip = (ActionEvent ae) -> {
         int next = ( now+1 > Main.mediaList.size()-1 ) ? 0 : now+1;
-        //MediaControl mcIn = new MediaControl(new MediaPlayer(Main.mediaList.get(next)));
-        //Main.mc.setMp(new MediaPlayer(Main.mediaList.get(next)));
-        //Main.mainPane.getChildren().remove(Main.mc);
-        //Main.mc.close();
-        //Main.mc.setMv(null);
-        //Main.mc.setMp(null);
-        //Main.mc = null;
-        //System.gc();
         Main.mc.destroy();
         Main.mc.init(new MediaPlayer(Main.mediaList.get(next)));
-        System.out.println("next = " + next);
         now = next;
-        //Main.mc = mcIn;
+        System.out.println("now = " + now);
+    };
+
+    // Кнопка предыдущая песня
+    static final EventHandler<ActionEvent> playPrevClip = (ActionEvent ae) -> {
+        int prev = ( now-1 < 0 ) ? Main.mediaList.size()-1 : now-1;
+        Main.mc.destroy();
+        Main.mc.init(new MediaPlayer(Main.mediaList.get(prev)));
+        now = prev;
+        System.out.println("now = " + now);
     };
 }

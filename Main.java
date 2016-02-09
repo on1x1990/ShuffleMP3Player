@@ -49,7 +49,6 @@ public class Main extends Application {
     static List<Media> mediaList = new ArrayList<>();
     static MediaView mv = new MediaView();
     static MediaControl mc;
-    static MediaControlClip mcc;
 
     // launch app
     public static void main (String args[]){
@@ -76,6 +75,7 @@ public class Main extends Application {
         choiseButton.setOnAction(StorageInts.chooseFiles);
         startButton.setOnAction(StorageInts.startChooserList);
         nextClip.setOnAction(StorageInts.playNextClip);
+        prevClip.setOnAction(StorageInts.playPrevClip);
 
 
         mainPane.getChildren().add(choiseButton);
@@ -85,8 +85,7 @@ public class Main extends Application {
             lineOverClips.getChildren().add(prevClip);
         mainPane.getChildren().add(choiseResponseButton);
 
-        //mcc = new MediaControlClip();
-        //mainPane.getChildren().add(mcc);
+
         mc = new MediaControl();
         mainPane.getChildren().add(mc);
 
