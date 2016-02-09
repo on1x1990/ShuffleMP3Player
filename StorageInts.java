@@ -11,6 +11,8 @@ import java.io.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Artem2011 on 08.02.2016.
@@ -28,6 +30,7 @@ public class StorageInts {
             for (File file : Main.filesList) {
                 try {Main.mediaList.add(new Media(file.toURI().toURL().toString()));}
                 catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
+                System.out.println(file.getName());
             }
         }
         else Main.choiseResponseButton.setText("Choose please!");
@@ -64,6 +67,23 @@ public class StorageInts {
 
     //  нопка перетасовывани€
     static final EventHandler<ActionEvent> shuffleClips = (ActionEvent ae) -> {
+        if (Main.mediaList.isEmpty()) {System.out.println("Instances of clips is not founded! Choose them and try again..."); return;}
 
+        if (Main.mc.getMp() != null) Main.mc.destroy();
+
+        int size = Main.mediaList.size();
+        List<Media> bufferList = new ArrayList<>(Main.mediaList);
+        List<Media> finishList = new ArrayList<>();
+        Random random = new Random();
+        for (int i = size; i >= 1; i--) {
+            int choise = random.nextInt(i);
+            finishList.add(bufferList.get(choise));
+            bufferList.remove(choise);
+        }
+        Main.mediaList = finishList;
+        System.out.println("New shuffled mediaList :: ");
+        for (int i = 0; i <= Main.mediaList.size()-1; i++) {System.out.println(i + " :: " + Main.mediaList.get(i).getSource());}
+
+        Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
     };
 }
