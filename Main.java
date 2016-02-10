@@ -26,7 +26,7 @@ enum AppState {READY_TO_PLAY, UNKNOWN;}
 public class Main extends Application {
     // app var's
     static final int WIDTH = 800;
-    static final int HEIGHT = 300;
+    static final int HEIGHT = 500;
 
     static Stage stage;
     static RootNode rootNode = new RootNode();
@@ -43,6 +43,7 @@ public class Main extends Application {
         static Button nextClip;
         static Button prevClip;
     static Label choiseResponseButton; // = new Label("While nothing chosen...");
+    static ScrollPane informScrollPane;
 
     static FileChooser fc = new FileChooser();
     static AppState appState = AppState.UNKNOWN;
@@ -66,6 +67,7 @@ public class Main extends Application {
             nextClip = new Button(" >> ");
             prevClip = new Button(" << ");
         choiseResponseButton = new Label("While nothing chosen...");
+        informScrollPane = new InformScrollPane();
 
         primaryStage.setTitle("ShuffleMP3Player");
         primaryStage.setScene(primaryScene);
@@ -88,7 +90,7 @@ public class Main extends Application {
             lineOverClips.getChildren().add(nextClip);
             lineOverClips.getChildren().add(prevClip);
         mainPane.getChildren().add(choiseResponseButton);
-
+        mainPane.getChildren().add(informScrollPane);
 
         mc = new MediaControl();
         mainPane.getChildren().add(mc);
