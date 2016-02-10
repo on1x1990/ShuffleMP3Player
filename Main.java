@@ -1,18 +1,11 @@
 package ru.artemryzhenkov;
 
 import javafx.application.Application;
-import javafx.event.*;
-import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.*;
-import javafx.scene.layout.*;
 import javafx.scene.media.*;
-import javafx.scene.paint.Color;
 import javafx.stage.*;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +35,7 @@ public class Main extends Application {
         static Button startButton; // = new Button("Start playing...");
         static Button nextClip;
         static Button prevClip;
-    static Label choiseResponseButton; // = new Label("While nothing chosen...");
+    static Label choiseResponse; // = new Label("While nothing chosen...");
     static ScrollPane informScrollPane;
 
     static FileChooser fc = new FileChooser();
@@ -66,7 +59,7 @@ public class Main extends Application {
             startButton = new Button("Start playing...");
             nextClip = new Button(" >> ");
             prevClip = new Button(" << ");
-        choiseResponseButton = new Label("While nothing chosen...");
+        choiseResponse = new Label("While nothing chosen...");
         informScrollPane = new InformScrollPane();
 
         primaryStage.setTitle("ShuffleMP3Player");
@@ -89,7 +82,7 @@ public class Main extends Application {
             lineOverClips.getChildren().add(startButton);
             lineOverClips.getChildren().add(nextClip);
             lineOverClips.getChildren().add(prevClip);
-        mainPane.getChildren().add(choiseResponseButton);
+        mainPane.getChildren().add(choiseResponse);
         mainPane.getChildren().add(informScrollPane);
 
         mc = new MediaControl();

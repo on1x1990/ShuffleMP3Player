@@ -5,14 +5,15 @@ import javafx.event.EventHandler;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import javax.sound.sampled.*;
-import java.applet.Applet;
-import java.io.*;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.UnaryOperator;
 
 /**
  * Created by Artem2011 on 08.02.2016.
@@ -20,7 +21,15 @@ import java.util.Random;
 public class StorageInts {
     static int now = 0;
 
-    //  нопка выбора файлов
+    // URL decoder
+    static final UnaryOperator<String> decode = (String string) -> {
+        String outString = "...";
+        try {outString = URLDecoder.decode(string, "UTF-8");}
+        catch (UnsupportedEncodingException e) {outString = string;}
+        return outString;
+    };
+
+    // files choose dialog
     static final EventHandler<ActionEvent> chooseFiles = (ActionEvent ae) -> {
         Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
         if (Main.filesList != null) {
@@ -32,42 +41,44 @@ public class StorageInts {
                 catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
                 System.out.println(file.getName());
             }
+            if(!Main.mediaList.isEmpty()) Main.choiseResponse.setText("New playList ready to play!");
         }
-        else Main.choiseResponseButton.setText("Choose please!");
+        else {Main.choiseResponse.setText("Choose mp3-clips please!"); return;}
         if(!Main.filesList.isEmpty()) Main.filesList = new ArrayList<>();
     };
 
-    //  нопка новый плейлист
+    // start playList button
     static final EventHandler<ActionEvent> startChooserList = (ActionEvent ae) -> {
         if (Main.mediaList.isEmpty()) return;
         now = 0;
         if (Main.mc.getMp() != null) Main.mc.destroy();
         Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
-        //Main.mainPane.getChildren().add(Main.mc);
-        System.out.println("now = " + now + " :: " + Main.mediaList.get(now).getSource());
+        Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
     };
 
-    //  нопка следующа€ песн€
+    // play next button
     static final EventHandler<ActionEvent> playNextClip = (ActionEvent ae) -> {
+        if (Main.mediaList.isEmpty()) return;
         int next = ( now+1 > Main.mediaList.size()-1 ) ? 0 : now+1;
         Main.mc.destroy();
         Main.mc.init(new MediaPlayer(Main.mediaList.get(next)));
         now = next;
-        System.out.println("now = " + now + " :: " + Main.mediaList.get(now).getSource());
+        Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
     };
 
-    //  нопка предыдуща€ песн€
+    // play prev button
     static final EventHandler<ActionEvent> playPrevClip = (ActionEvent ae) -> {
+        if (Main.mediaList.isEmpty()) return;
         int prev = ( now-1 < 0 ) ? Main.mediaList.size()-1 : now-1;
         Main.mc.destroy();
         Main.mc.init(new MediaPlayer(Main.mediaList.get(prev)));
         now = prev;
-        System.out.println("now = " + now + " :: " + Main.mediaList.get(now).getSource());
+        Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
     };
 
-    //  нопка перетасовывани€
+    // shuffle button
     static final EventHandler<ActionEvent> shuffleClips = (ActionEvent ae) -> {
-        if (Main.mediaList.isEmpty()) {System.out.println("Instances of clips is not founded! Choose them and try again..."); return;}
+        if (Main.mediaList.isEmpty()) {Main.choiseResponse.setText("Instances of clips is not founded! Choose them and try again..."); return;}
 
         if (Main.mc.getMp() != null) Main.mc.destroy();
 
@@ -86,4 +97,7 @@ public class StorageInts {
 
         Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
     };
+
+
+
 }

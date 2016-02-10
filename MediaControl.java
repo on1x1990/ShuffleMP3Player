@@ -43,7 +43,55 @@ public class MediaControl extends BorderPane {
     public MediaPlayer getMp() {return this.mp;}
     public void setMv(MediaView setMv) {this.mediaView = setMv;}
 
-    public MediaControl(){}
+    public MediaControl(){
+        setStyle("-fx-background-color: #bfc2c7;");
+        mvPane = new Pane() {};
+        mvPane.setStyle("-fx-background-color: black;");
+        setCenter(mvPane);
+
+        mediaBar = new HBox();
+        mediaBar.setAlignment(Pos.CENTER);
+        mediaBar.setPadding(new Insets(5, 10, 5, 10));
+        BorderPane.setAlignment(mediaBar, Pos.CENTER);
+        playButton = new Button(">");
+
+        mediaBar.getChildren().add(playButton);
+        setBottom(mediaBar);
+
+        // add spacer
+        spacer = new Label("   ");
+        mediaBar.getChildren().add(spacer);
+
+        // add time label
+        timeLabel = new Label("Time: ");
+        mediaBar.getChildren().add(timeLabel);
+
+        // add time slider
+        timeSlider = new Slider();
+        HBox.setHgrow(timeSlider, Priority.ALWAYS);
+        timeSlider.setMinWidth(50);
+        timeSlider.setMaxWidth(Double.MAX_VALUE);
+
+        mediaBar.getChildren().add(timeSlider);
+
+        // add play label
+        playTime = new Label();
+        playTime.setPrefWidth(130);
+        playTime.setMinWidth(50);
+        mediaBar.getChildren().add(playTime);
+
+        // add the volume label
+        volumeLabel = new Label("Vol: ");
+        mediaBar.getChildren().add(volumeLabel);
+
+        // add volume slider
+        volumeSlider = new Slider();
+        volumeSlider.setPrefWidth(70);
+        volumeSlider.setMaxWidth(Region.USE_PREF_SIZE);
+        volumeSlider.setMinWidth(30);
+
+        mediaBar.getChildren().add(volumeSlider);
+    }
 
     public void init(MediaPlayer mp) {
         this.mp = mp;
@@ -240,26 +288,34 @@ public class MediaControl extends BorderPane {
     }
 
     public void destroy(){
-        mediaBar.getChildren().remove(volumeSlider);
-        volumeSlider = null;
-        mediaBar.getChildren().remove(volumeLabel);
-        volumeLabel = null;
-        mediaBar.getChildren().remove(playTime);
-        playTime = null;
-        mediaBar.getChildren().remove(timeSlider);
-        timeSlider = null;
-        mediaBar.getChildren().remove(timeLabel);
-        timeLabel = null;
-        mediaBar.getChildren().remove(spacer);
-        spacer = null;
-        mediaBar.getChildren().remove(playButton);
-        playButton = null;
-        mediaBar = null;
-        mvPane.getChildren().remove(mediaView);
-        mvPane = null;
-        mediaView = null;
-        mp.dispose();
-        this.mp = null;
+        if (volumeSlider != null) {
+            mediaBar.getChildren().remove(volumeSlider);
+            volumeSlider = null;}
+        if (volumeLabel != null) {
+            mediaBar.getChildren().remove(volumeLabel);
+            volumeLabel = null;}
+        if (playTime != null) {
+            mediaBar.getChildren().remove(playTime);
+            playTime = null;}
+        if (timeSlider != null) {
+            mediaBar.getChildren().remove(timeSlider);
+            timeSlider = null;}
+        if (timeLabel != null) {
+            mediaBar.getChildren().remove(timeLabel);
+            timeLabel = null;}
+        if (spacer != null) {
+            mediaBar.getChildren().remove(spacer);
+            spacer = null;}
+        if (playButton != null) {
+            mediaBar.getChildren().remove(playButton);
+            playButton = null;}
+        if (mediaBar != null) mediaBar = null;
+        if (mediaView != null) mvPane.getChildren().remove(mediaView);
+        if (mvPane != null) mvPane = null;
+        if(mediaView != null) mediaView = null;
+        if (mp != null) {
+            mp.dispose();
+            this.mp = null;}
         stopRequested = false;
         atEndOfMedia = false;
     }
