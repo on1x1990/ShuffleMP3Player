@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.control.*;
 import javafx.scene.*;
 import javafx.scene.media.*;
+import javafx.scene.text.Text;
 import javafx.stage.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class Main extends Application {
         static Button nextClip;
         static Button prevClip;
     static Label choiseResponse; // = new Label("While nothing chosen...");
-    static ScrollPane informScrollPane;
+    static InformScrollPane informScrollPane;
 
     static FileChooser fc = new FileChooser();
     static AppState appState = AppState.UNKNOWN;

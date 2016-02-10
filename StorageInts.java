@@ -39,9 +39,16 @@ public class StorageInts {
             for (File file : Main.filesList) {
                 try {Main.mediaList.add(new Media(file.toURI().toURL().toString()));}
                 catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
-                System.out.println(file.getName());
+                //System.out.println(file.getName());
             }
-            if(!Main.mediaList.isEmpty()) Main.choiseResponse.setText("New playList ready to play!");
+            if(!Main.mediaList.isEmpty()) {
+                Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
+                Main.informScrollPane.clear().addNewText(" MediaList choosen :: \n \n");
+                for (int i = 0; i <= Main.mediaList.size()-1; i++) {
+                    if (i < 10) Main.informScrollPane.addNewText("  " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+                    else Main.informScrollPane.addNewText(" " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+                }
+            }
         }
         else {Main.choiseResponse.setText("Choose mp3-clips please!"); return;}
         if(!Main.filesList.isEmpty()) Main.filesList = new ArrayList<>();
@@ -92,8 +99,11 @@ public class StorageInts {
             bufferList.remove(choise);
         }
         Main.mediaList = finishList;
-        System.out.println("New shuffled mediaList :: ");
-        for (int i = 0; i <= Main.mediaList.size()-1; i++) {System.out.println(i + " :: " + Main.mediaList.get(i).getSource());}
+        Main.informScrollPane.clear().addNewText(" New shuffled mediaList :: \n \n");
+        for (int i = 0; i <= Main.mediaList.size()-1; i++) {
+            if (i < 10) Main.informScrollPane.addNewText("  " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+            else Main.informScrollPane.addNewText(" " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+        }
 
         Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
     };

@@ -16,12 +16,17 @@ public class InformScrollPane extends ScrollPane {
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTPINK, null, null)));
         this.setBorder(new Border(new BorderStroke(Color.AQUA, BorderStrokeStyle.SOLID, new CornerRadii(0.0), new BorderWidths(3.0))));
         this.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-
         this.setContent(text);
     }
 
-    public void addNewText(String string){
+    public InformScrollPane addNewText(String string){
         String oldText = this.text.getText();
         this.text.setText(oldText + string);
+        return this;
+    }
+
+    public InformScrollPane clear(){
+        this.text.setText("");
+        return this;
     }
 }
