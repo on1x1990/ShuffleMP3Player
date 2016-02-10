@@ -16,6 +16,7 @@ import javafx.scene.media.MediaPlayer.*;
 import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
+import java.io.File;
 
 
 /**
@@ -93,7 +94,18 @@ public class MediaControl extends BorderPane {
         mediaBar.getChildren().add(volumeSlider);
     }
 
-    public void init(MediaPlayer mp) {
+    public boolean init(MediaPlayer mp) {
+        // settings, if file is not exists (e.g. deleted or moved)
+        if (!new File(StorageInts.getNormalPath.apply(mp.getMedia())).exists()) {
+            // if prev file is last
+            if (StorageInts.now == 0) {
+                Main.choiseResponse.setText("No clips for play! Choose mp3 and start play...");
+                return false;
+            }
+            Main.nextClip.fire();
+            return false;
+        }
+        // settings, if file is exists - init continue...
         this.mp = mp;
         setStyle("-fx-background-color: #bfc2c7;");
         mediaView = new MediaView(mp);
@@ -224,6 +236,7 @@ public class MediaControl extends BorderPane {
         mediaBar.getChildren().add(volumeSlider);
 
         mp.setAutoPlay(true);
+        return true;
     }
 
     protected void updateValues() {
