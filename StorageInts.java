@@ -49,7 +49,6 @@ public class StorageInts {
             for (File file : Main.filesList) {
                 try {Main.mediaList.add(new Media(file.toURI().toURL().toString()));}
                 catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
-                //System.out.println(file.getName());
             }
             if(!Main.mediaList.isEmpty()) {
                 Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
@@ -121,6 +120,36 @@ public class StorageInts {
         Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
     };
 
-
-
+    // add button
+    static final EventHandler<ActionEvent> addClips = (ActionEvent ae) -> {
+        Main.mc.getPlayButton().fire();
+        Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
+        if (Main.filesList.isEmpty()) return;
+        boolean oneOrMore = false; // defines how match files added in mediaList
+        String outString = "\n";
+        int nowPlus = Main.mediaList.size()-1;
+        for (File file : Main.filesList) {
+            try {
+                boolean isExists = false;
+                for (Media med : Main.mediaList) {
+                    if (file.getPath().equals(decode.apply(getNormalPath.apply(med))) == true) {
+                        System.out.println("This clip is already added :: " + file.getPath());
+                        isExists = true;
+                        break;
+                    }
+                }
+                if (isExists == true) continue;
+                Main.mediaList.add(new Media(file.toURI().toURL().toString()));
+                oneOrMore = true;
+                nowPlus++;
+                if (nowPlus < 10) outString += "  " + nowPlus + "  ::  " + decode.apply(Main.mediaList.get(nowPlus).getSource() + "\n");
+                else outString += " " + nowPlus + " :: " + decode.apply(Main.mediaList.get(nowPlus).getSource() + "\n");
+            }
+            catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
+        }
+        if (oneOrMore == false) return;
+        outString = "\n Added clips :: \n" + outString;
+        Main.informScrollPane.addNewText(outString);
+        Main.mc.getPlayButton().fire();
+    };
 }

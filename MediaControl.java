@@ -43,6 +43,7 @@ public class MediaControl extends BorderPane {
     public void setMp(MediaPlayer setMp) {this.mp = setMp;}
     public MediaPlayer getMp() {return this.mp;}
     public void setMv(MediaView setMv) {this.mediaView = setMv;}
+    public Button getPlayButton() {return this.playButton;}
 
     public MediaControl(){
         setStyle("-fx-background-color: #bfc2c7;");
@@ -96,7 +97,7 @@ public class MediaControl extends BorderPane {
 
     public boolean init(MediaPlayer mp) {
         // settings, if file is not exists (e.g. deleted or moved)
-        if (!new File(StorageInts.getNormalPath.apply(mp.getMedia())).exists()) {
+        if (!new File(StorageInts.decode.apply(StorageInts.getNormalPath.apply(mp.getMedia()))).exists()) {
             // if prev file is last
             if (StorageInts.now == 0) {
                 Main.choiseResponse.setText("No clips for play! Choose mp3 and start play...");

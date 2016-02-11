@@ -34,6 +34,8 @@ public class Main extends Application {
     static LineOverClips lineOverClips = new LineOverClips();
         static Button shuffleClips;
         static Button startButton; // = new Button("Start playing...");
+        static Button addClips;
+        static Label emptyLabel_1;
         static Button nextClip;
         static Button prevClip;
     static Label choiseResponse; // = new Label("While nothing chosen...");
@@ -58,6 +60,8 @@ public class Main extends Application {
         choiseButton = new Button("Choose mp3 file...");
             shuffleClips = new Button("Shuffle");
             startButton = new Button("Start playing...");
+            addClips = new Button("Add clips");
+            emptyLabel_1 = new Label("     ||      ");
             nextClip = new Button(" >> ");
             prevClip = new Button(" << ");
         choiseResponse = new Label("While nothing chosen...");
@@ -73,6 +77,7 @@ public class Main extends Application {
         choiseButton.setOnAction(StorageInts.chooseFiles);
             shuffleClips.setOnAction(StorageInts.shuffleClips);
             startButton.setOnAction(StorageInts.startChooserList);
+            addClips.setOnAction(StorageInts.addClips);
             nextClip.setOnAction(StorageInts.playNextClip);
             prevClip.setOnAction(StorageInts.playPrevClip);
 
@@ -81,6 +86,8 @@ public class Main extends Application {
         mainPane.getChildren().add(lineOverClips);
             lineOverClips.getChildren().add(shuffleClips);
             lineOverClips.getChildren().add(startButton);
+            lineOverClips.getChildren().add(addClips);
+            lineOverClips.getChildren().add(emptyLabel_1);
             lineOverClips.getChildren().add(nextClip);
             lineOverClips.getChildren().add(prevClip);
         mainPane.getChildren().add(choiseResponse);
