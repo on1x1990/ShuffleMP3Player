@@ -35,6 +35,7 @@ public class Main extends Application {
         static Button shuffleClips;
         static Button startButton; // = new Button("Start playing...");
         static Button addClips;
+        static Button deleteThisClip;
         static Label emptyLabel_1;
         static Button nextClip;
         static Button prevClip;
@@ -61,6 +62,7 @@ public class Main extends Application {
             shuffleClips = new Button("Shuffle");
             startButton = new Button("Start playing...");
             addClips = new Button("Add clips");
+            deleteThisClip = new Button("Delete this!");
             emptyLabel_1 = new Label("     ||      ");
             nextClip = new Button(" >> ");
             prevClip = new Button(" << ");
@@ -78,6 +80,7 @@ public class Main extends Application {
             shuffleClips.setOnAction(StorageInts.shuffleClips);
             startButton.setOnAction(StorageInts.startChooserList);
             addClips.setOnAction(StorageInts.addClips);
+            deleteThisClip.setOnAction(StorageInts.deleteThisClip);
             nextClip.setOnAction(StorageInts.playNextClip);
             prevClip.setOnAction(StorageInts.playPrevClip);
 
@@ -87,6 +90,7 @@ public class Main extends Application {
             lineOverClips.getChildren().add(shuffleClips);
             lineOverClips.getChildren().add(startButton);
             lineOverClips.getChildren().add(addClips);
+            lineOverClips.getChildren().add(deleteThisClip);
             lineOverClips.getChildren().add(emptyLabel_1);
             lineOverClips.getChildren().add(nextClip);
             lineOverClips.getChildren().add(prevClip);

@@ -122,9 +122,9 @@ public class StorageInts {
 
     // add button
     static final EventHandler<ActionEvent> addClips = (ActionEvent ae) -> {
-        Main.mc.getPlayButton().fire();
+        //Main.mc.getPlayButton().fire();
         Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
-        if (Main.filesList.isEmpty()) return;
+        if (Main.filesList == null) return;
         boolean oneOrMore = false; // defines how match files added in mediaList
         String outString = "\n";
         int nowPlus = Main.mediaList.size()-1;
@@ -150,6 +150,23 @@ public class StorageInts {
         if (oneOrMore == false) return;
         outString = "\n Added clips :: \n" + outString;
         Main.informScrollPane.addNewText(outString);
-        Main.mc.getPlayButton().fire();
+        //Main.mc.getPlayButton().fire();
+    };
+
+    // delete clip button
+    static final EventHandler<ActionEvent> deleteThisClip = (ActionEvent ae) -> {
+        //Media media = Main.mc.getMp().getMedia();
+        if (!Main.mediaList.isEmpty()) Main.mediaList.remove(Main.mc.getMp().getMedia());
+        Main.mc.destroy();
+        Main.informScrollPane.clear().addNewText("").addNewText(" New mediaList after deleted :: \n \n");
+        for (int i = 0; i <= Main.mediaList.size()-1; i++) {
+            if (i < 10) Main.informScrollPane.addNewText("  " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+            else Main.informScrollPane.addNewText(" " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+        }
+
+        if (!Main.mediaList.isEmpty()) {
+            if (now <= Main.mediaList.size()-1) Main.mc.init(new MediaPlayer(Main.mediaList.get(now)));
+            else Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
+        }
     };
 }
