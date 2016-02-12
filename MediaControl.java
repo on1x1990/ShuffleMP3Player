@@ -100,7 +100,7 @@ public class MediaControl extends BorderPane {
         if (!new File(StorageInts.decode.apply(StorageInts.getNormalPath.apply(mp.getMedia()))).exists()) {
             // if prev file is last
             if (StorageInts.now == 0) {
-                Main.choiseResponse.setText("No clips for play! Choose mp3 and start play...");
+                Main.informLastAction.setText("No clips for play! Choose mp3 and start play...");
                 return false;
             }
             Main.nextClip.fire();

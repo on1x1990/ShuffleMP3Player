@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.scene.control.*;
 import javafx.scene.*;
 import javafx.scene.media.*;
-import javafx.scene.text.Text;
 import javafx.stage.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class Main extends Application {
         static Label emptyLabel_1;
         static Button nextClip;
         static Button prevClip;
-    static Label choiseResponse; // = new Label("While nothing chosen...");
+    static Label informLastAction; // = new Label("While nothing chosen...");
     static InformScrollPane informScrollPane;
 
     static FileChooser fc = new FileChooser();
@@ -58,15 +57,15 @@ public class Main extends Application {
     public void start (Stage primaryStage){
         stage = primaryStage;
 
-        choiseButton = new Button("Choose mp3 file...");
+        choiseButton = new Button("New PlayList");
             shuffleClips = new Button("Shuffle");
             startButton = new Button("Start playing...");
-            addClips = new Button("Add clips");
+            addClips = new Button("Add tracks");
             deleteThisClip = new Button("Delete this!");
             emptyLabel_1 = new Label("     ||      ");
             nextClip = new Button(" >> ");
             prevClip = new Button(" << ");
-        choiseResponse = new Label("While nothing chosen...");
+        informLastAction = new Label("While nothing chosen...");
         informScrollPane = new InformScrollPane();
 
         primaryStage.setTitle("ShuffleMP3Player");
@@ -94,7 +93,7 @@ public class Main extends Application {
             lineOverClips.getChildren().add(emptyLabel_1);
             lineOverClips.getChildren().add(nextClip);
             lineOverClips.getChildren().add(prevClip);
-        mainPane.getChildren().add(choiseResponse);
+        mainPane.getChildren().add(informLastAction);
         mainPane.getChildren().add(informScrollPane);
 
         mc = new MediaControl();

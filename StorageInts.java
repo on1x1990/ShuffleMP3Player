@@ -8,10 +8,7 @@ import javafx.scene.media.MediaPlayer;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URLDecoder;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,134 +36,185 @@ public class StorageInts {
         return filePath;
     };
 
-    // files choose dialog
+    // new tracks list
     static final EventHandler<ActionEvent> chooseFiles = (ActionEvent ae) -> {
-        Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
-        if (Main.filesList != null) {
-            //Main.appState = AppState.READY_TO_PLAY;
-            //Main.stateLabel.setText("State: " + Main.appState.toString());
-            Main.mediaList.clear();
-            for (File file : Main.filesList) {
-                try {Main.mediaList.add(new Media(file.toURI().toURL().toString()));}
-                catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
-            }
-            if(!Main.mediaList.isEmpty()) {
-                Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
-                Main.informScrollPane.clear().addNewText(" MediaList choosen :: \n \n");
-                for (int i = 0; i <= Main.mediaList.size()-1; i++) {
-                    if (i < 10) Main.informScrollPane.addNewText("  " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
-                    else Main.informScrollPane.addNewText(" " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
-                }
-            }
+        List<File> medFilesList = Main.fc.showOpenMultipleDialog(Main.stage);
+        if (medFilesList == null) {
+            Main.informLastAction.setText("NEW TRACKS BUTTON :: Nothing choosen! Try again!");
+            return;
         }
-        else {Main.choiseResponse.setText("Choose mp3-clips please!"); return;}
-        if(!Main.filesList.isEmpty()) Main.filesList = new ArrayList<>();
+        Main.filesList = new ArrayList<>(medFilesList);
+        Main.informScrollPane.addNewText(" New tracks list: \n \n");
+        for (int i = 0; i <= Main.filesList.size()-1; i++) {
+            if (i < 10) Main.informScrollPane.addNewText(" "); // if number of track < 10 to format string added one space
+            Main.informScrollPane.addNewText(" " + i + " :: " + Main.filesList.get(i).getPath() + "\n");
+        }
+        Main.informLastAction.setText("NEW TRACKS BUTTON :: Tracks list is ready to play!");
     };
 
-    // start playList button
+    // start tracks list
     static final EventHandler<ActionEvent> startChooserList = (ActionEvent ae) -> {
-        if (Main.mediaList.isEmpty()) return;
-        now = 0;
+        if (Main.filesList.isEmpty()) {
+            Main.informLastAction.setText("START BUTTON :: Tracks list is empty! Choose new track list...");
+            return;
+        }
         if (Main.mc.getMp() != null) Main.mc.destroy();
-        if( Main.mc.init(new MediaPlayer(Main.mediaList.get(0))) ) {
-            Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
+        try {
+            File file = Main.filesList.get(0);
+            if (Main.mc.init(new MediaPlayer(new Media(file.toURI().toURL().toString())))) {
+                now = 0;
+                Main.informLastAction.setText("START BUTTON :: now = " + now + " :: " + file.getPath());
+            }
+        }
+        catch (MalformedURLException e) {
+            Main.informLastAction.setText("START BUTTON :: Something is wrong... Try again...");
+            System.out.println(e);
         }
     };
 
     // play next button
     static final EventHandler<ActionEvent> playNextClip = (ActionEvent ae) -> {
-        if (Main.mediaList.isEmpty()) return;
-        int next = ( now+1 > Main.mediaList.size()-1 ) ? 0 : now+1;
+        if (Main.filesList.isEmpty()) {
+            Main.informLastAction.setText("NEXT BUTTON :: Tracks list is empty! choose new track list...");
+            return;
+        }
+        int next = (now+1 > Main.filesList.size()-1) ? 0 : now+1;
+        File file = Main.filesList.get(next);
         Main.mc.destroy();
-        if ( Main.mc.init(new MediaPlayer(Main.mediaList.get(next))) ) {
-            now = next;
-            Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
+        try {
+            if (Main.mc.init(new MediaPlayer(new Media(file.toURI().toURL().toString())))) {
+                now = next;
+                Main.informLastAction.setText("now = " + now + " :: " + file.getPath());
+            }
+        }
+        catch (MalformedURLException e) {
+            Main.informLastAction.setText("NEXT BUTTON :: Something is wrong... Try again...");
+            System.out.println(e);
         }
     };
 
     // play prev button
     static final EventHandler<ActionEvent> playPrevClip = (ActionEvent ae) -> {
-        if (Main.mediaList.isEmpty()) return;
-        int prev = ( now-1 < 0 ) ? Main.mediaList.size()-1 : now-1;
+        if (Main.filesList.isEmpty()) {
+            Main.informLastAction.setText("PREV BUTTON :: Tracks list is empty! choose new track list...");
+            return;
+        }
+        int prev = (now-1 < 0) ? Main.filesList.size()-1 : now-1;
+        File file = Main.filesList.get(prev);
         Main.mc.destroy();
-        if ( Main.mc.init(new MediaPlayer(Main.mediaList.get(prev))) ) {
-            now = prev;
-            Main.choiseResponse.setText("now = " + now + " :: " + decode.apply(Main.mediaList.get(now).getSource()));
+        try {
+            if (Main.mc.init(new MediaPlayer(new Media(file.toURI().toURL().toString())))) {
+                now = prev;
+                Main.informLastAction.setText("now = " + now + " :: " + file.getPath());
+            }
+        }
+        catch (MalformedURLException e) {
+            Main.informLastAction.setText("PREV BUTTON :: Something is wrong... Try again...");
+            System.out.println(e);
         }
     };
 
     // shuffle button
     static final EventHandler<ActionEvent> shuffleClips = (ActionEvent ae) -> {
-        if (Main.mediaList.isEmpty()) {Main.choiseResponse.setText("Instances of clips is not founded! Choose them and try again..."); return;}
-
+        if (Main.filesList.isEmpty()) {
+            Main.informLastAction.setText("SHUFFLE BUTTON :: Tracks list is empty! choose new track list...");
+            return;
+        }
         if (Main.mc.getMp() != null) Main.mc.destroy();
-
-        int size = Main.mediaList.size();
-        List<Media> bufferList = new ArrayList<>(Main.mediaList);
-        List<Media> finishList = new ArrayList<>();
+        int size = Main.filesList.size();
+        List<File> bufferList = new ArrayList<>(Main.filesList);
+        List<File> finishList = new ArrayList<>();
         Random random = new Random();
         for (int i = size; i >= 1; i--) {
-            int choise = random.nextInt(i);
-            finishList.add(bufferList.get(choise));
-            bufferList.remove(choise);
+            int choice = random.nextInt(i);
+            finishList.add(bufferList.get(choice));
+            bufferList.remove(choice);
         }
-        Main.mediaList = finishList;
-        Main.informScrollPane.clear().addNewText(" New shuffled mediaList :: \n \n");
-        for (int i = 0; i <= Main.mediaList.size()-1; i++) {
-            if (i < 10) Main.informScrollPane.addNewText("  " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
-            else Main.informScrollPane.addNewText(" " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+        Main.filesList = finishList;
+        Main.informScrollPane.clear().addNewText(" New shuffled tracks list: \n \n");
+        for (int i = 0; i <= Main.filesList.size()-1; i++) {
+            if (i < 10) Main.informScrollPane.addNewText(" ");
+            Main.informScrollPane.addNewText(" " + i + " :: " + Main.filesList.get(i).getPath() + "\n");
         }
-
-        Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
+        try {
+            File file = Main.filesList.get(0);
+            now = 0;
+            Main.mc.init(new MediaPlayer(new Media(file.toURI().toURL().toString())));
+            Main.informLastAction.setText("now = " + now + " :: " + file.getPath());
+        }
+        catch (MalformedURLException e) {
+            Main.informLastAction.setText("SHUFFLE BUTTON :: Something is wrong... Try again...");
+            System.out.println(e);
+        }
     };
 
     // add button
     static final EventHandler<ActionEvent> addClips = (ActionEvent ae) -> {
-        //Main.mc.getPlayButton().fire();
-        Main.filesList = Main.fc.showOpenMultipleDialog(Main.stage);
-        if (Main.filesList == null) return;
-        boolean oneOrMore = false; // defines how match files added in mediaList
+        List<File> medFilesList = Main.fc.showOpenMultipleDialog(Main.stage);
+        if (medFilesList == null) {
+            Main.informLastAction.setText("ADD BUTTON :: Nothing choosen to add! Try again...");
+            return;
+        }
+        if (Main.filesList.isEmpty()) {
+            Main.informLastAction.setText("ADD BUTTON :: At first use new tracks list button to choose tracks!");
+            return;
+        }
+        boolean oneOrMore = false; // defines how match files added in filesList
         String outString = "\n";
-        int nowPlus = Main.mediaList.size()-1;
-        for (File file : Main.filesList) {
-            try {
-                boolean isExists = false;
-                for (Media med : Main.mediaList) {
-                    if (file.getPath().equals(decode.apply(getNormalPath.apply(med))) == true) {
-                        System.out.println("This clip is already added :: " + file.getPath());
-                        isExists = true;
-                        break;
-                    }
+        int nowPlus = Main.filesList.size()-1;
+        for (File medFile : medFilesList) {
+            boolean isExists = false;
+            for (File file : Main.filesList) {
+                if (file.getPath().equals(medFile.getPath())) {
+                    System.out.println("ADD BUTTON :: This track is already added :: " + medFile.getPath());
+                    isExists = true;
+                    break;
                 }
-                if (isExists == true) continue;
-                Main.mediaList.add(new Media(file.toURI().toURL().toString()));
-                oneOrMore = true;
-                nowPlus++;
-                if (nowPlus < 10) outString += "  " + nowPlus + "  ::  " + decode.apply(Main.mediaList.get(nowPlus).getSource() + "\n");
-                else outString += " " + nowPlus + " :: " + decode.apply(Main.mediaList.get(nowPlus).getSource() + "\n");
             }
-            catch (MalformedURLException e) {System.out.println("Error add " + file + "in mediaList :: " + e);}
+            if (isExists == true) continue;
+            Main.filesList.add(medFile);
+            oneOrMore = true;
+            nowPlus++;
+            if (nowPlus < 10) outString += " ";
+            outString += " " + nowPlus + " :: " + medFile.getPath() + "\n";
         }
         if (oneOrMore == false) return;
         outString = "\n Added clips :: \n" + outString;
         Main.informScrollPane.addNewText(outString);
-        //Main.mc.getPlayButton().fire();
+        Main.informLastAction.setText("ADD BUTTON :: Finished successful! Below you can see added tracks!");
     };
 
     // delete clip button
     static final EventHandler<ActionEvent> deleteThisClip = (ActionEvent ae) -> {
-        //Media media = Main.mc.getMp().getMedia();
-        if (!Main.mediaList.isEmpty()) Main.mediaList.remove(Main.mc.getMp().getMedia());
-        Main.mc.destroy();
-        Main.informScrollPane.clear().addNewText("").addNewText(" New mediaList after deleted :: \n \n");
-        for (int i = 0; i <= Main.mediaList.size()-1; i++) {
-            if (i < 10) Main.informScrollPane.addNewText("  " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
-            else Main.informScrollPane.addNewText(" " + i + "  ::  " + decode.apply(Main.mediaList.get(i).getSource() + "\n"));
+        if (Main.mc.getMp() == null) {
+            Main.informLastAction.setText("DELETE BUTTON :: [Error 1] No track for delete!");
+            return;
         }
-
-        if (!Main.mediaList.isEmpty()) {
-            if (now <= Main.mediaList.size()-1) Main.mc.init(new MediaPlayer(Main.mediaList.get(now)));
-            else Main.mc.init(new MediaPlayer(Main.mediaList.get(0)));
+        if (Main.filesList.isEmpty()) {
+            Main.informLastAction.setText("DELETE BUTTON :: [Error 2] Tracks list is empty!");
+            return;
+        }
+        Main.filesList.remove(now);
+        Main.mc.destroy();
+        if (Main.filesList.isEmpty()) {
+            Main.informScrollPane.clear().addNewText(" No tracks for playing...");
+            return;
+        }
+        Main.informScrollPane.clear().addNewText(" New tracks list after deleted: \n \n");
+        for (int i = 0; i <= Main.filesList.size()-1; i++) {
+            if (i < 10) Main.informScrollPane.addNewText(" ");
+            Main.informScrollPane.addNewText(" " + i + " :: " + Main.filesList.get(i) + "\n");
+        }
+        try {
+            File file;
+            if (now <= Main.filesList.size()-1) file = Main.filesList.get(now);
+            else { file = Main.filesList.get(0); now = 0; }
+            Main.mc.init(new MediaPlayer(new Media(file.toURI().toURL().toString())));
+            Main.informLastAction.setText("now = " + now + " :: " + file.getPath());
+        }
+        catch (MalformedURLException e) {
+            Main.informLastAction.setText("DELETE BUTTON :: Something is wrong... Try again...");
+            System.out.println(e);
         }
     };
 }
