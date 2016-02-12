@@ -3,6 +3,7 @@ package ru.artemryzhenkov;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -44,6 +45,14 @@ public class MediaControl extends BorderPane {
     public MediaPlayer getMp() {return this.mp;}
     public void setMv(MediaView setMv) {this.mediaView = setMv;}
     public Button getPlayButton() {return this.playButton;}
+    //private DoubleProperty valueVolume;
+    //public DoubleProperty getValueVolume() {return this.valueVolume;}
+    //public DoubleProperty set(DoubleProperty vv) {this.valueVolume = vv;}
+    private double valueVolume = -1.0;
+    public double getValueVolume() {return this.valueVolume;}
+    public void set(double vv) {this.valueVolume = vv;}
+    public Slider getVolumeSlider() {return this.volumeSlider;}
+
 
     public MediaControl(){
         setStyle("-fx-background-color: #bfc2c7;");
@@ -234,6 +243,11 @@ public class MediaControl extends BorderPane {
             }
         });
 
+        if (getValueVolume() != -1.0) {
+            //getVolumeSlider().setValue(getValueVolume());
+            mp.setVolume(getValueVolume() / 100.0);
+        }
+
         mediaBar.getChildren().add(volumeSlider);
 
         mp.setAutoPlay(true);
@@ -304,6 +318,8 @@ public class MediaControl extends BorderPane {
     public void destroy(){
         if (volumeSlider != null) {
             mediaBar.getChildren().remove(volumeSlider);
+            valueVolume = volumeSlider.getValue();
+            System.out.println(valueVolume);
             volumeSlider = null;}
         if (volumeLabel != null) {
             mediaBar.getChildren().remove(volumeLabel);

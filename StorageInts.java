@@ -44,7 +44,7 @@ public class StorageInts {
             return;
         }
         Main.filesList = new ArrayList<>(medFilesList);
-        Main.informScrollPane.addNewText(" New tracks list: \n \n");
+        Main.informScrollPane.clear().addNewText(" New tracks list: \n \n");
         for (int i = 0; i <= Main.filesList.size()-1; i++) {
             if (i < 10) Main.informScrollPane.addNewText(" "); // if number of track < 10 to format string added one space
             Main.informScrollPane.addNewText(" " + i + " :: " + Main.filesList.get(i).getPath() + "\n");
@@ -219,5 +219,11 @@ public class StorageInts {
             Main.informLastAction.setText("DELETE BUTTON :: Something is wrong... Try again...");
             System.out.println(e);
         }
+    };
+
+    // vol ><
+    static final EventHandler<ActionEvent> medVolume = (ActionEvent ae) -> {
+        Main.mc.getVolumeSlider().setValue(50.0);
+        Main.mc.getMp().setVolume(0.5);
     };
 }

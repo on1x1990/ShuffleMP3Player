@@ -38,6 +38,7 @@ public class Main extends Application {
         static Label emptyLabel_1;
         static Button nextClip;
         static Button prevClip;
+        static Button medVolume;
     static Label informLastAction;
     static InformScrollPane informScrollPane;
 
@@ -63,6 +64,7 @@ public class Main extends Application {
             emptyLabel_1 = new Label("     ||      ");
             nextClip = new Button(" >> ");
             prevClip = new Button(" << ");
+            medVolume = new Button("Vol ><");
         informLastAction = new Label("While nothing chosen...");
         informScrollPane = new InformScrollPane();
 
@@ -80,6 +82,7 @@ public class Main extends Application {
             deleteThisClip.setOnAction(StorageInts.deleteThisClip);
             nextClip.setOnAction(StorageInts.playNextClip);
             prevClip.setOnAction(StorageInts.playPrevClip);
+            medVolume.setOnAction(StorageInts.medVolume);
 
 
         mainPane.getChildren().add(choiseButton);
@@ -91,6 +94,7 @@ public class Main extends Application {
             lineOverClips.getChildren().add(emptyLabel_1);
             lineOverClips.getChildren().add(nextClip);
             lineOverClips.getChildren().add(prevClip);
+            lineOverClips.getChildren().add(medVolume);
         mainPane.getChildren().add(informLastAction);
         mainPane.getChildren().add(informScrollPane);
 
