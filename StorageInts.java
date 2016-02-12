@@ -63,7 +63,7 @@ public class StorageInts {
             File file = Main.filesList.get(0);
             if (Main.mc.init(new MediaPlayer(new Media(file.toURI().toURL().toString())))) {
                 now = 0;
-                Main.informLastAction.setText("START BUTTON :: now = " + now + " :: " + file.getPath());
+                Main.informLastAction.setText("now = " + now + " :: " + file.getPath());
             }
         }
         catch (MalformedURLException e) {
@@ -179,7 +179,7 @@ public class StorageInts {
             outString += " " + nowPlus + " :: " + medFile.getPath() + "\n";
         }
         if (oneOrMore == false) return;
-        outString = "\n Added clips :: \n" + outString;
+        outString = "\n Added tracks :: \n" + outString;
         Main.informScrollPane.addNewText(outString);
         Main.informLastAction.setText("ADD BUTTON :: Finished successful! Below you can see added tracks!");
     };
@@ -197,7 +197,10 @@ public class StorageInts {
         Main.filesList.remove(now);
         Main.mc.destroy();
         if (Main.filesList.isEmpty()) {
-            Main.informScrollPane.clear().addNewText(" No tracks for playing...");
+            Main.informScrollPane.clear().addNewText(" No tracks for playing...");;
+            Main.mainPane.getChildren().remove(Main.mc);
+            Main.mc = new MediaControl();
+            Main.mainPane.getChildren().add(Main.mc);
             return;
         }
         Main.informScrollPane.clear().addNewText(" New tracks list after deleted: \n \n");

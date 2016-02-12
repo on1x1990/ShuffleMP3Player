@@ -29,23 +29,21 @@ public class Main extends Application {
     static MainPane mainPane = new MainPane();
     static BottomPane bottomPane = new BottomPane();
 
-    static Button choiseButton; // = new Button("Choose mp3 file...");
+    static Button choiseButton;
     static LineOverClips lineOverClips = new LineOverClips();
         static Button shuffleClips;
-        static Button startButton; // = new Button("Start playing...");
+        static Button startButton;
         static Button addClips;
         static Button deleteThisClip;
         static Label emptyLabel_1;
         static Button nextClip;
         static Button prevClip;
-    static Label informLastAction; // = new Label("While nothing chosen...");
+    static Label informLastAction;
     static InformScrollPane informScrollPane;
 
     static FileChooser fc = new FileChooser();
     static AppState appState = AppState.UNKNOWN;
     static List<File> filesList = new ArrayList<>();
-    static List<Media> mediaList = new ArrayList<>();
-    static MediaView mv = new MediaView();
     static MediaControl mc;
 
     // launch app
