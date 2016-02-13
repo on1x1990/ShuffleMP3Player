@@ -4,13 +4,18 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.PickResult;
 import javafx.scene.layout.*;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.*;
@@ -217,6 +222,8 @@ public class MediaControl extends BorderPane {
             }
         });
 
+        timeSlider.setOnMouseReleased( (me) -> timeSlider.setValueChanging(true) );
+
         mediaBar.getChildren().add(timeSlider);
 
         // add play label
@@ -243,10 +250,8 @@ public class MediaControl extends BorderPane {
             }
         });
 
-        if (getValueVolume() != -1.0) {
-            //getVolumeSlider().setValue(getValueVolume());
-            mp.setVolume(getValueVolume() / 100.0);
-        }
+        volumeSlider.setOnMouseReleased( (me) -> volumeSlider.setValueChanging(true) );
+        if (getValueVolume() != -1.0) {mp.setVolume(getValueVolume() / 100.0);}
 
         mediaBar.getChildren().add(volumeSlider);
 
